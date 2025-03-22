@@ -21,4 +21,5 @@ db
 db/*
 deps/*
 deps
+demo
 # End of https://www.toptal.com/developers/gitignore/api/rust
