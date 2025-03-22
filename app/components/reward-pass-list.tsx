@@ -85,7 +85,7 @@ function RewardPassCard({ pass }: RewardPassCardProps) {
         </div>
       </div>
 
-      <div className="relative h-[300px] w-full bg-gray-100">
+      <div className="relative h-[475px] w-full bg-gray-100">
         <Image
           src={pass.image || "/reward-pass.png"}
           alt={`${pass.artist} reward pass`}

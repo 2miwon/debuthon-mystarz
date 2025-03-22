@@ -58,7 +58,7 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
             </div>
 
             <Link href={`/initiatives/${campaign.id}`} className="block">
-              <div className="relative h-48 mb-4 bg-gray-100 rounded-lg overflow-hidden">
+              <div className="relative h-[475px] mb-4 bg-gray-100 rounded-lg overflow-hidden">
                 <Image
                   src={
                     campaign.image || "/placeholder.svg?height=200&width=400"
@@ -133,7 +133,7 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
 
             <div className="mb-2">
               <p className="font-medium">
-                {campaign.fundingAmount.toLocaleString()}원이 찜했어요.
+                {campaign.fundingAmount.toLocaleString()}명이 찜했어요.
               </p>
             </div>
 
