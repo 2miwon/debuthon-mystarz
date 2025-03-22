@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./Providiers";
+import { AuthLoadingProvider } from "./auth-loading-context";
+import { Footer } from "./footer";
 
 export const metadata: Metadata = {
   title: "MyStarz",
@@ -16,8 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
-        <footer className="w-full bg-pink-50 mt-[120px] pt-[380px]"></footer>
+        <AuthLoadingProvider>
+          <Providers>{children}</Providers>
+          <Footer />
+        </AuthLoadingProvider>
       </body>
     </html>
   );

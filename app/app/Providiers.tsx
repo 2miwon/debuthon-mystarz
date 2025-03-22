@@ -12,6 +12,7 @@ import {
   DefaultTheme,
   ThemeConfig,
 } from "@futureverse/auth-ui";
+import { useAuthLoading } from "./auth-loading-context";
 
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID as string;
 
@@ -23,13 +24,15 @@ const customTheme: ThemeConfig = {
 const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: ReactNode }) {
+  const { setAuthLoading } = useAuthLoading();
   const [theme, setTheme] = useState<ThemeConfig>(customTheme);
 
   const [authClient, setAuthClient] = useState<FutureverseAuthClient | null>(
-    null
+    null,
   );
 
   useEffect(() => {
+    setAuthLoading(true);
     const client = new FutureverseAuthClient({
       clientId,
       environment: "staging",
@@ -38,10 +41,13 @@ export function Providers({ children }: { children: ReactNode }) {
     });
 
     setAuthClient(client);
+    setTimeout(() => {
+      setAuthLoading(false);
+    }, 2000);
   }, []);
 
   if (!authClient) {
-    return <div>Loading auth client...</div>;
+    return <div className="h-[80vh] bg-white"> </div>;
   }
 
   return (
