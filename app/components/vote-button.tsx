@@ -51,9 +51,6 @@ export default function VoteButton() {
     }
   };
 
-
-  };
-
   return (
     <div className="relative h-full flex justify-center -mt-[60px]">
       <button
