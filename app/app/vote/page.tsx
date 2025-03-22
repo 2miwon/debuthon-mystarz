@@ -19,18 +19,55 @@ export default function page() {
         <div className="flex gap-4 justify-center gap-x-20">
           <div className="w-1/5 z-10 rounded-lg">
             <Image src="/jang-vote.png" alt="vote" width={240} height={190} />
-            <div className="flex flex-col justify-center">
-              <p className="text-white">Jang Wonyoung</p>
-              <input type="radio" name="vote" value="jang" />
+            <div className="flex flex-col pt-5 justify-center text-center items-center gap-y-4">
+              <p className="text-white font-bold">Jang Wonyoung</p>
+              <input
+                type="radio"
+                name="vote"
+                value="jang"
+                className="w-6 h-6 appearance-none border-2 border-white rounded-full 
+             checked:border-white relative 
+             checked:after:content-[''] checked:after:w-3 checked:after:h-3 
+             checked:after:bg-white checked:after:rounded-full 
+             checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 
+             checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+              />
             </div>
           </div>
           <div className="w-1/5 z-10 rounded-lg">
             <Image src="/han-vote.png" alt="vote" width={240} height={190} />
-            <p className="text-white">Han Sohee</p>
+            <div className="flex flex-col pt-5 justify-center items-center text-center gap-y-4">
+              <p className="text-white font-bold">Han Sohee</p>
+              <input
+                type="radio"
+                name="vote"
+                value="jang"
+                className="w-6 h-6 appearance-none border-2 border-white rounded-full 
+             checked:border-white relative 
+             checked:after:content-[''] checked:after:w-3 checked:after:h-3 
+             checked:after:bg-white checked:after:rounded-full 
+             checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 
+             checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+              />
+            </div>
           </div>
           <div className="w-1/5 z-10 rounded-lg">
             <Image src="/byun-vote.png" alt="vote" width={240} height={190} />
-            <p className="text-white">Byun Wooseok</p>
+
+            <div className="flex flex-col pt-5 justify-center items-center text-center gap-y-4">
+              <p className="text-white font-bold">Byun Wooseok</p>
+              <input
+                type="radio"
+                name="vote"
+                value="jang"
+                className="w-6 h-6 appearance-none border-2 border-white rounded-full 
+             checked:border-white relative 
+             checked:after:content-[''] checked:after:w-3 checked:after:h-3 
+             checked:after:bg-white checked:after:rounded-full 
+             checked:after:absolute checked:after:top-1/2 checked:after:left-1/2 
+             checked:after:-translate-x-1/2 checked:after:-translate-y-1/2"
+              />
+            </div>
           </div>
         </div>
       </div>
