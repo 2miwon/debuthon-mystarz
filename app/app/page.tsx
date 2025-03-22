@@ -19,13 +19,13 @@ export default function CampaignListPage() {
     },
     {
       id: "38",
-      creator: "번우석",
+      creator: "변우석",
       daysLeft: 7,
-      title: "번우석과 함께하는 주거 취약계층 지원 이니셔티브",
+      title: "변우석과 함께하는 주거 취약계층 지원 이니셔티브",
       description: "",
       fundingPercentage: 210,
       fundingAmount: 1000,
-      tags: ["배우 번우석과 함께 주거 취약계층 지원하기"],
+      tags: ["배우 변우석과 함께 주거 취약계층 지원하기"],
       image: "/njz.png?height=200&width=400",
     },
     {

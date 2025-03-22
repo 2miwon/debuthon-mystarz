@@ -41,11 +41,11 @@ const impactBadges = [
   },
   {
     id: "5",
-    artist: "번우석",
+    artist: "변우석",
     date: "2025.01.15",
     image: "/impact-badge.png?height=400&width=300",
     impact: "주거 지원",
-    initiative: "배우 번우석과 함께하는 주거 취약계층 지원",
+    initiative: "배우 변우석과 함께하는 주거 취약계층 지원",
     type: "주거 권리 옹호자",
   },
   {
@@ -85,7 +85,7 @@ function ImpactBadgeCard({ badge }: ImpactBadgeCardProps) {
         </div>
       </div>
 
-      <div className="relative h-[300px] w-full bg-gray-100">
+      <div className="relative h-[475px] w-full bg-gray-100">
         <Image
           src={badge.image || "/impact-badge.png"}
           alt={`${badge.artist} impact badge`}

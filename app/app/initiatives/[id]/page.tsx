@@ -23,17 +23,17 @@ const getCampaignById = (id: string) => {
     },
     "38": {
       id: "38",
-      title: "번우석과 함께하는 주거 취약계층 지원 이니셔티브",
+      title: "변우석과 함께하는 주거 취약계층 지원 이니셔티브",
       description:
-        "배우 번우석과 함께 주거 취약계층을 위한 지원 프로젝트에 동참해주세요.",
+        "배우 변우석과 함께 주거 취약계층을 위한 지원 프로젝트에 동참해주세요.",
       daysLeft: 7,
-      artist: "번우석",
+      artist: "변우석",
       fundingPercentage: 210,
       participants: 320,
       fundingAmount: 21000000,
-      rewardType: "번우석 사인 텀블러",
+      rewardType: "변우석 사인 텀블러",
       quote:
-        "번우석은 다양한 작품을 통해 연기력을 인정받은 배우로, 사회 공헌 활동에도 적극적으로 참여하고 있습니다.",
+        "변우석은 다양한 작품을 통해 연기력을 인정받은 배우로, 사회 공헌 활동에도 적극적으로 참여하고 있습니다.",
       image: "/njz.png?height=500&width=800",
     },
     "39": {
