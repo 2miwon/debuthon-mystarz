@@ -9,6 +9,7 @@ interface Campaign {
   id: string;
   creator: string;
   daysLeft: number;
+  icon: string;
   title: string;
   description: string;
   fundingPercentage: number;
@@ -21,9 +22,10 @@ interface Campaign {
 interface CampaignListProps {
   title: string;
   campaigns: Campaign[];
+  type?: string | "RewardPass";
 }
 
-export function CampaignList({ title, campaigns }: CampaignListProps) {
+export function CampaignList({ title, campaigns, type }: CampaignListProps) {
   const [visibleIndex, setVisibleIndex] = useState(0);
   const itemsPerPage = 3;
   const maxIndex = Math.max(0, campaigns.length - itemsPerPage);
@@ -44,24 +46,52 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
   return (
     <div className="mb-12">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold flex items-center">
-          {title} <ChevronRight size={20} className="ml-1" />
-        </h2>
+        {title && (
+          <h2 className="text-xl font-bold flex items-center">
+            {title} <ChevronRight size={20} className="ml-1" />
+          </h2>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
         {visibleCampaigns.map((campaign) => (
           <div key={campaign.id} className="flex flex-col">
             <div className="flex items-center mb-4 space-x-2">
-              <Image src={campaign.icon} width={50} height={50} />
+              <Image
+                src={campaign.icon || ""}
+                alt="icon"
+                width={50}
+                height={50}
+              />
               <span className="font-medium">{campaign.creator}</span>
-              <span className="text-gray-500">•</span>
-              <span className="text-gray-500">
-                {campaign.daysLeft} Days Left
-              </span>
+              {type === "Marketplace" ? (
+                ""
+              ) : (
+                <span className="text-gray-500">•</span>
+              )}
+              {type === "Marketplace" ? (
+                ""
+              ) : type === "RewardPass" || type === "ImpactBadge" ? (
+                <span className="text-gray-500">2025.05.25</span>
+              ) : (
+                <span className="text-gray-500">
+                  {campaign.daysLeft} Days Left
+                </span>
+              )}
             </div>
 
-            <Link href={`/initiatives/${campaign.id}`} className="block">
+            <Link
+              href={
+                type === "ImpactBadge"
+                  ? `impact-badge/${campaign.id}`
+                  : type === "Marketplace"
+                  ? `marketplace/${campaign.id}`
+                  : type === "RewardPass"
+                  ? `reward-pass/${campaign.id}`
+                  : `/initiatives/${campaign.id}`
+              }
+              className="block"
+            >
               <div className="relative h-[475px] mb-4 bg-gray-100 rounded-lg overflow-hidden">
                 <Image
                   src={
@@ -127,22 +157,26 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
                     />
                   </svg>
                 </button>
-                <button aria-label="View details">
-                  {/* <Circle size={20} />'' */}
+                {type === "RewardPass" || type === "ImpactBadge" ? (
+                  <></>
+                ) : (
+                  <button aria-label="View details">
+                    {/* <Circle size={20} />'' */}
 
-                  <svg
-                    width="30"
-                    height="30"
-                    viewBox="0 0 30 30"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15.0588 26L14.7794 22.7H14.5C11.8549 22.7 9.61029 21.7925 7.76618 19.9775C5.92206 18.1625 5 15.9533 5 13.35C5 10.7467 5.92206 8.5375 7.76618 6.7225C9.61029 4.9075 11.8549 4 14.5 4C15.8225 4 17.0566 4.24292 18.2022 4.72875C19.3478 5.21458 20.3537 5.88375 21.2199 6.73625C22.086 7.58875 22.7659 8.57875 23.2596 9.70625C23.7532 10.8337 24 12.0483 24 13.35C24 14.725 23.7718 16.045 23.3154 17.31C22.8591 18.575 22.2351 19.7483 21.4434 20.83C20.6517 21.9117 19.711 22.8925 18.6213 23.7725C17.5316 24.6525 16.3441 25.395 15.0588 26ZM17.2941 21.985C18.6167 20.885 19.6924 19.5971 20.5213 18.1212C21.3502 16.6454 21.7647 15.055 21.7647 13.35C21.7647 11.3517 21.0615 9.66042 19.6551 8.27625C18.2488 6.89208 16.5304 6.2 14.5 6.2C12.4696 6.2 10.7512 6.89208 9.34485 8.27625C7.93848 9.66042 7.23529 11.3517 7.23529 13.35C7.23529 15.3483 7.93848 17.0396 9.34485 18.4237C10.7512 19.8079 12.4696 20.5 14.5 20.5H17.2941V21.985Z"
-                      fill="#1F1F1F"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      width="30"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15.0588 26L14.7794 22.7H14.5C11.8549 22.7 9.61029 21.7925 7.76618 19.9775C5.92206 18.1625 5 15.9533 5 13.35C5 10.7467 5.92206 8.5375 7.76618 6.7225C9.61029 4.9075 11.8549 4 14.5 4C15.8225 4 17.0566 4.24292 18.2022 4.72875C19.3478 5.21458 20.3537 5.88375 21.2199 6.73625C22.086 7.58875 22.7659 8.57875 23.2596 9.70625C23.7532 10.8337 24 12.0483 24 13.35C24 14.725 23.7718 16.045 23.3154 17.31C22.8591 18.575 22.2351 19.7483 21.4434 20.83C20.6517 21.9117 19.711 22.8925 18.6213 23.7725C17.5316 24.6525 16.3441 25.395 15.0588 26ZM17.2941 21.985C18.6167 20.885 19.6924 19.5971 20.5213 18.1212C21.3502 16.6454 21.7647 15.055 21.7647 13.35C21.7647 11.3517 21.0615 9.66042 19.6551 8.27625C18.2488 6.89208 16.5304 6.2 14.5 6.2C12.4696 6.2 10.7512 6.89208 9.34485 8.27625C7.93848 9.66042 7.23529 11.3517 7.23529 13.35C7.23529 15.3483 7.93848 17.0396 9.34485 18.4237C10.7512 19.8079 12.4696 20.5 14.5 20.5H17.2941V21.985Z"
+                        fill="#1F1F1F"
+                      />
+                    </svg>
+                  </button>
+                )}
                 <button aria-label="Play">
                   <svg
                     width="30"
@@ -168,8 +202,14 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
                       : "text-rose-500"
                   }`}
                 >
-                  {campaign.fundingPercentage}
-                  {title === "Initiative"
+                  {type === "Marketplace"
+                    ? "30"
+                    : type === "RewardPass" || type === "ImpactBadge"
+                    ? undefined
+                    : campaign.fundingPercentage}
+                  {type === "RewardPass" || type === "ImpactBadge"
+                    ? ""
+                    : title === "Initiative"
                     ? "% Funded"
                     : title === "Coming Soon"
                     ? "Waiting"
@@ -180,25 +220,40 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
 
             <div className="mb-2">
               <p className="font-medium">
-                {campaign.fundingAmount.toLocaleString()} Favorites.
+                {type === "Marketplace"
+                  ? "200"
+                  : type === "RewardPass" || type === "ImpactBadge"
+                  ? "1 Item Owned"
+                  : campaign.fundingAmount.toLocaleString()}{" "}
+                {type === "Marketplace"
+                  ? "Items Sold"
+                  : type === "RewardPass" || type === "ImpactBadge"
+                  ? ""
+                  : "Favorites."}
               </p>
             </div>
 
-            <div className="flex text-sm text-gray-600">
-              <InitiativeIcon />
-              <p>
-                <span className="font-bold">Initiative</span>{" "}
-                {campaign.tags.join(" ")}
-              </p>
-            </div>
+            {type === "xxx" ? (
+              <></>
+            ) : (
+              <>
+                <div className="flex text-sm text-gray-600">
+                  <InitiativeIcon />
+                  <p>
+                    <span className="font-bold">Initiative</span>{" "}
+                    {campaign.tags.join(" ")}
+                  </p>
+                </div>
 
-            <div className="flex text-sm text-gray-600">
-              <RewardPass />
-              <p>
-                <span className="font-bold">Rewardpass</span>{" "}
-                {campaign.rewardPass}
-              </p>
-            </div>
+                <div className="flex text-sm text-gray-600">
+                  <RewardPass />
+                  <p>
+                    <span className="font-bold">Rewardpass</span>{" "}
+                    {campaign.rewardPass}
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         ))}
       </div>

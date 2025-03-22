@@ -17,6 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>{children}</Providers>
+        <footer className="w-full bg-pink-50 mt-[120px] pt-[380px]"></footer>
       </body>
     </html>
   );

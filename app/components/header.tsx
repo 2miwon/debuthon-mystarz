@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Bell, User } from "lucide-react";
-import { useAuth } from "@futureverse/auth-react";
 import { LogIn } from "../lib/ui-shared/src/components/Navigation";
 
 export function Header() {
@@ -142,6 +141,28 @@ export function Header() {
             <span className="font-medium hidden md:inline">Skylar Oh</span>
           </Link>
         )}
+        <Link href="/reward-pass" className="flex items-center space-x-2">
+          <div className="w-10 h-10 rounded-full border-2 border-gray-200 flex items-center justify-center">
+            {/* <User size={20} /> */}
+
+            <svg
+              width="40"
+              height="80"
+              viewBox="0 0 40 80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="20" cy="40" r="19" stroke="black" stroke-width="2" />
+              <circle cx="20" cy="35" r="6" stroke="black" stroke-width="2" />
+              <path
+                d="M6 52V52C12.2543 41.2784 27.7457 41.2784 34 52V52"
+                stroke="black"
+                strokeWidth="2"
+              />
+            </svg>
+          </div>
+          <span className="font-medium hidden md:inline">Collection</span>
+        </Link>
       </div>
     </header>
   );

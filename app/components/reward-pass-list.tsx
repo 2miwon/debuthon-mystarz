@@ -1,5 +1,6 @@
 import { Heart, Play } from "lucide-react";
 import Image from "next/image";
+import { CampaignList } from "./campaign-list";
 
 // Sample reward pass data
 const rewardPasses = [
@@ -120,11 +121,53 @@ function RewardPassCard({ pass }: RewardPassCardProps) {
 }
 
 export function RewardPassList() {
+  const initiativeCampaigns = [
+    {
+      id: "37",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-1.png?height=200&width=400",
+    },
+    {
+      id: "38",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-1.png?height=200&width=400",
+    },
+    {
+      id: "39",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-1.png?height=200&width=400",
+    },
+
+    // Add more campaigns if needed
+  ];
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {rewardPasses.map((pass) => (
-        <RewardPassCard key={pass.id} pass={pass} />
-      ))}
-    </div>
+    <CampaignList title="" type="RewardPass" campaigns={initiativeCampaigns} />
   );
 }

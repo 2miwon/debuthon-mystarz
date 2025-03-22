@@ -2,6 +2,7 @@ import { Header } from "@/components/header";
 import Image from "next/image";
 import Link from "next/link";
 import { Heart } from "lucide-react";
+import { CampaignList } from "@/components/campaign-list";
 
 // Sample marketplace data
 const marketplaceItems = [
@@ -78,15 +79,129 @@ export default function MarketplacePage() {
     <div className="min-h-screen bg-white">
       <Header />
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-8">마켓플레이스</h1>
+        <h1 className="text-2xl font-bold mb-0">Marketplace</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {marketplaceItems.map((item) => (
-            <MarketplaceItem key={item.id} item={item} />
-          ))}
-        </div>
+        <MarketPlaceList />
+
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> */}
+        {/*   {marketplaceItems.map((item) => ( */}
+        {/*     <MarketplaceItem key={item.id} item={item} /> */}
+        {/*   ))} */}
+        {/* </div> */}
       </main>
     </div>
+  );
+}
+
+export function MarketPlaceList() {
+  const initiativeCampaigns = [
+    {
+      id: "37",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-1.png?height=200&width=400",
+    },
+    {
+      id: "38",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-1.png?height=200&width=400",
+    },
+    {
+      id: "39",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-1.png?height=200&width=400",
+    },
+
+    // Add more campaigns if needed
+  ];
+
+  const initiativeCampaigns2 = [
+    {
+      id: "40",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-3.png?height=200&width=400",
+    },
+    {
+      id: "41",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-3.png?height=200&width=400",
+    },
+    {
+      id: "42",
+      creator: "NJZ",
+      icon: "/njz-icon.png",
+      daysLeft: 2,
+      title: "An Animal Welfare Initiative with NJZ",
+      description:
+        "대형 아이돌 그룹 NJZ와 지구를 지키자! 유기농 및 천연 염료 등의 패션 소재로 환경 보호와 사회적 책임을 동시에 실현하자!",
+      fundingPercentage: 258,
+      fundingAmount: 2000,
+      tags: ["An Animal Welfare Initiative with NJZ"],
+      rewardPass: "NJZ ‘Warm Paws’ Hoodie",
+      image: "/mk-3.png?height=200&width=400",
+    },
+
+    // Add more campaigns if needed
+  ];
+  return (
+    <>
+      <CampaignList
+        title=""
+        type="Marketplace"
+        campaigns={initiativeCampaigns}
+      />
+      <div className="-mt-8">
+        <CampaignList
+          title=""
+          type="Marketplace"
+          campaigns={initiativeCampaigns2}
+        />
+      </div>
+    </>
   );
 }
 
