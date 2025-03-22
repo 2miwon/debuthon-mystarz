@@ -17,7 +17,7 @@ export function Banner() {
   const slides: BannerSlide[] = [
     {
       id: 1,
-      image: "/bts.png?height=400&width=1200",
+      image: "/njz-banner.png?height=400&width=1200",
       title: "BTS와 함께하는",
       subtitle: "미래 세대를 위한 지속가능 발전 이니셔티브",
     },
@@ -54,10 +54,10 @@ export function Banner() {
             className="object-cover"
             priority={index === 0}
           />
-          <div className="absolute bottom-8 left-8 z-20 text-white">
-            <h2 className="text-xl font-medium">{slide.title}</h2>
-            <p className="text-sm mt-1">{slide.subtitle}</p>
-          </div>
+          {/* <div className="absolute bottom-8 left-8 z-20 text-white"> */}
+          {/*   <h2 className="text-xl font-medium">{slide.title}</h2> */}
+          {/*   <p className="text-sm mt-1">{slide.subtitle}</p> */}
+          {/* </div> */}
         </div>
       ))}
 

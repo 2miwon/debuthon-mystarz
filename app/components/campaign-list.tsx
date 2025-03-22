@@ -54,7 +54,9 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
             <div className="flex items-center mb-4 space-x-2">
               <span className="font-medium">{campaign.creator}</span>
               <span className="text-gray-500">•</span>
-              <span className="text-gray-500">마감 D-{campaign.daysLeft}</span>
+              <span className="text-gray-500">
+                {campaign.daysLeft} Days Left
+              </span>
             </div>
 
             <Link href={`/initiatives/${campaign.id}`} className="block">
@@ -68,12 +70,12 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
                   className="object-cover"
                 />
 
-                <div className="absolute inset-x-0 bottom-0 p-4">
-                  <p className="text-white text-sm leading-relaxed">
-                    {campaign.title}
-                  </p>
-                </div>
-
+                {/* <div className="absolute inset-x-0 bottom-0 p-4"> */}
+                {/*   <p className="text-white text-sm leading-relaxed"> */}
+                {/*     {campaign.title} */}
+                {/*   </p> */}
+                {/* </div> */}
+                {/**/}
                 <div className="absolute left-2 top-1/2 -translate-y-1/2">
                   <button
                     onClick={(e) => {
@@ -126,19 +128,24 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
                       : "text-rose-500"
                   }`}
                 >
-                  {campaign.fundingPercentage}% 달성
+                  {campaign.fundingPercentage}
+                  {title === "Initiative"
+                    ? "% Funded"
+                    : title === "Coming Soon"
+                    ? "Waiting"
+                    : "XRP"}
                 </span>
               </div>
             </div>
 
             <div className="mb-2">
               <p className="font-medium">
-                {campaign.fundingAmount.toLocaleString()}명이 찜했어요.
+                {campaign.fundingAmount.toLocaleString()} Favorites.
               </p>
             </div>
 
             <div className="text-sm text-gray-600">
-              <p>※ 이니셔티브 {campaign.tags.join(" ")}</p>
+              <p>※ Initiative {campaign.tags.join(" ")}</p>
             </div>
           </div>
         ))}
