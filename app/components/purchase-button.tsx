@@ -32,20 +32,24 @@ export default function PurchaseButton() {
           abi: contractABI,
           functionName: "buy",
           args: ["0x7bDC5dCd118831d8AC895C753d76bB671eaB6482", BigInt(4)],
-          value: BigInt(1),
+          // value: BigInt(1),
+          value: drops,
         },
         {
           onSuccess(data) {
+            console.info("🚀 : purchase-button.tsx:38: data=", data);
             setMessage("Success to buy.");
             setIsLoading(false);
           },
           onError(error) {
+            console.info("🚀 : purchase-button.tsx:43: error=", error);
             setMessage("Try again.");
             setIsLoading(false);
           },
         },
       );
     } catch (error) {
+      console.info("🚀 : purchase-button.tsx:50: error=", error);
       setMessage("Buy failed.");
       setIsLoading(false);
     }

@@ -36,58 +36,22 @@ export default function VoteButton() {
         },
         {
           onSuccess(data) {
-            setMessage("참여가 성공적으로 완료되었습니다!");
+            setMessage("Vote success!");
             setIsLoading(false);
           },
           onError(error) {
-            setMessage("다시 시도해주세요.");
+            setMessage("Try again.");
             setIsLoading(false);
           },
         },
       );
     } catch (error) {
-      setMessage("요청에 실패했습니다.");
+      setMessage("Vote failed.");
       setIsLoading(false);
     }
   };
 
-  const handleFinal = async () => {
-    setIsLoading(true);
-    setMessage("");
 
-    if (!isConnected) {
-      // If not connected, trigger the wallet connection
-      connect({ connector: connectors[0] }); // Connect to the first available connector (e.g., MetaMask)
-      return;
-    }
-
-    const xrpAmount = 1;
-    // const drops = BigInt(xrpAmount * 1_000_000);
-    const drops = BigInt(xrpAmount * 1);
-
-    try {
-      writeContract(
-        {
-          address: contractAddress,
-          abi: contractABI,
-          functionName: "finalize",
-          value: BigInt(0),
-        },
-        {
-          onSuccess(data) {
-            setMessage("참여가 성공적으로 완료되었습니다!");
-            setIsLoading(false);
-          },
-          onError(error) {
-            setMessage("다시 시도해주세요.");
-            setIsLoading(false);
-          },
-        },
-      );
-    } catch (error) {
-      setMessage("요청에 실패했습니다.");
-      setIsLoading(false);
-    }
   };
 
   return (
@@ -97,7 +61,7 @@ export default function VoteButton() {
         onClick={handleJoin}
         disabled={isLoading}
       >
-        {isLoading ? "처리 중..." : <>Vote Submitted</>}
+        {isLoading ? "Processing..." : <>Vote Submitted</>}
       </button>
 
       {message && (
