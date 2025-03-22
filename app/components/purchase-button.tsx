@@ -31,7 +31,7 @@ export default function PurchaseButton() {
           address: contractAddress,
           abi: contractABI,
           functionName: "buy",
-          args: ["0x322aA19A8f4e3a5B1d95B4f81b9a2Bfa9FB4eDE3", BigInt(2)],
+          args: ["0x97785B0D26b0842375CF89e56a47679DfD5422E9", BigInt(1)],
           value: BigInt(1),
         },
         {
