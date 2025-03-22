@@ -26,7 +26,7 @@ export default function CampaignListPage() {
       fundingPercentage: 210,
       fundingAmount: 1000,
       tags: ["배우 변우석과 함께 주거 취약계층 지원하기"],
-      image: "/njz.png?height=200&width=400",
+      image: "/byun.png?height=200&width=400",
     },
     {
       id: "39",
@@ -37,7 +37,7 @@ export default function CampaignListPage() {
       fundingPercentage: 77,
       fundingAmount: 777,
       tags: ["축구선수 손홍민과 함께하는장애 아동 축구 캠프"],
-      image: "/njz.png?height=200&width=400",
+      image: "/son.png?height=200&width=400",
     },
     // Add more campaigns if needed
   ];
@@ -53,7 +53,7 @@ export default function CampaignListPage() {
       fundingPercentage: 150,
       fundingAmount: 5000,
       tags: ["배우 한소희 후원"],
-      image: "/njz.png?height=200&width=400",
+      image: "/han.png?height=200&width=400",
     },
     // Add more campaigns
   ];
@@ -69,7 +69,7 @@ export default function CampaignListPage() {
       fundingPercentage: 100,
       fundingAmount: 100000,
       tags: ["라이브콘서트 NJZ 키링"],
-      image: "/njz.png?height=200&width=400",
+      image: "/reward-pass.png?height=200&width=400",
     },
     // Add more campaigns
   ];

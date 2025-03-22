@@ -84,14 +84,14 @@ export default async function CampaignDetailPage({
           <div>
             <div className="relative h-[400px] w-full rounded-lg overflow-hidden mb-6">
               <Image
-                src={campaign.image || "/placeholder.svg"}
+                src={"/njz-detail-0.png"}
                 alt={campaign.title}
                 fill
                 className="object-cover"
               />
             </div>
 
-            <div className="border border-gray-200 rounded-lg p-4 mb-6">
+            <div className="border border-gray-200 rounded-lg p-4 mb-10">
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
                   <span className="text-xs">ℹ️</span>
@@ -100,6 +100,43 @@ export default async function CampaignDetailPage({
               </div>
               <p className="text-gray-700">{campaign.quote}</p>
             </div>
+
+            <p className="font-semibold text-lg text-center pb-10">
+              환경을 보호하는 패션 소재가 있다면?
+            </p>
+
+            <div>
+              <div className="relative h-[400px] w-full rounded-lg overflow-hidden mb-10">
+                <Image
+                  src={"/njz-detail-1.png"}
+                  alt={campaign.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
+              <p className="text-center pb-10">
+                썩지 않는 플라스틱 소재의 사용을 줄이고 <br />
+                유기농 및 천연 염료 등의 패션 소재로
+              </p>
+            </div>
+
+            <div>
+              <div className="relative h-[400px] w-full rounded-lg overflow-hidden mb-10">
+                <Image
+                  src={"/njz-detail-2.png"}
+                  alt={campaign.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+
+            <p className="text-center pb-10">
+              NJZ와 함께 환경 보호와 사회적 책임을
+              <br /> 동시에 실현하는
+              <br /> 지속 가능한 패션 소재 이니셔티브
+            </p>
           </div>
 
           {/* Right column - Campaign Details */}
