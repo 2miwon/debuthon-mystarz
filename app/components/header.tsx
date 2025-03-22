@@ -12,9 +12,9 @@ export function Header() {
           <Link href="/" className="text-base font-medium">
             이니셔티브
           </Link>
-          {/* <Link href="/marketplace" className="text-base font-medium"> */}
-          {/*   마켓플레이스 */}
-          {/* </Link> */}
+          <Link href="/marketplace" className="text-base font-medium">
+            마켓플레이스
+          </Link>
         </nav>
       </div>
       <div className="flex items-center space-x-4">

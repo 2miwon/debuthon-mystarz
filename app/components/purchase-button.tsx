@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useWriteContract, useAccount, useConnect } from "wagmi";
 import { contractABI, contractAddress } from "../app/contractConfig";
 
-export default function JoinButton() {
+export default function PurchaseButton() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const { isConnected } = useAccount();
@@ -90,17 +90,26 @@ export default function JoinButton() {
   };
 
   return (
-    <div>
+    <div className="relative h-full">
       <button
-        className="w-full bg-[#5ae2ad] hover:bg-[#4cd19c] text-white py-4 rounded-lg font-medium text-lg"
+        className="bg-[#5ae2ad] w-full h-full hover:bg-[#4cd19c] text-white py-4 rounded-lg font-medium text-lg"
         onClick={handleJoin}
         disabled={isLoading}
       >
-        {isLoading ? "처리 중..." : "이니셔티브 참여하기"}
+        {isLoading ? (
+          "처리 중..."
+        ) : (
+          <>
+            <div>구매하기</div>
+            <div className="text-sm font-normal">{100}개 판매 중</div>
+          </>
+        )}
       </button>
 
       {message && (
-        <p className="mt-2 text-center text-sm text-gray-600">{message}</p>
+        <p className="absolute pt-2 left-1/2 -translate-x-1/2 text-center text-sm text-gray-600">
+          {message}
+        </p>
       )}
     </div>
   );
