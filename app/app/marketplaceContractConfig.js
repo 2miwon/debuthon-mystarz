@@ -1,28 +1,7 @@
 // app/contractConfig.js
 export const contractABI = [
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_sbtRouterContract",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_goalAmount",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "_duration",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "_tokenURI",
-        type: "string",
-      },
-    ],
+    inputs: [],
     stateMutability: "nonpayable",
     type: "constructor",
   },
@@ -30,19 +9,31 @@ export const contractABI = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
+        indexed: false,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "itemId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
         internalType: "address",
-        name: "contributor",
+        name: "seller",
         type: "address",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "amount",
+        name: "price",
         type: "uint256",
       },
     ],
-    name: "ContributionReceived",
+    name: "ItemCreated",
     type: "event",
   },
   {
@@ -50,73 +41,128 @@ export const contractABI = [
     inputs: [
       {
         indexed: false,
-        internalType: "bool",
-        name: "success",
-        type: "bool",
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "totalRaised",
+        name: "itemId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "seller",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "buyer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "price",
         type: "uint256",
       },
     ],
-    name: "FundingFinalized",
+    name: "ItemSold",
     type: "event",
   },
   {
-    inputs: [],
-    name: "SBTtokenURI",
-    outputs: [
+    anonymous: false,
+    inputs: [
       {
-        internalType: "string",
-        name: "",
-        type: "string",
+        indexed: false,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "itemId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "seller",
+        type: "address",
       },
     ],
-    stateMutability: "view",
-    type: "function",
+    name: "SaleCanceled",
+    type: "event",
   },
   {
-    inputs: [],
-    name: "contribute",
+    inputs: [
+      {
+        internalType: "address",
+        name: "_contractAddr",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_itemId",
+        type: "uint256",
+      },
+    ],
+    name: "buy",
     outputs: [],
     stateMutability: "payable",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "contribution",
+    inputs: [],
+    name: "fetchItemsOnSale",
     outputs: [
       {
-        internalType: "uint256",
+        components: [
+          {
+            internalType: "uint256",
+            name: "itemId",
+            type: "uint256",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "contractAddr",
+                type: "address",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct MarketPlace.NFTToken",
+            name: "token",
+            type: "tuple",
+          },
+          {
+            internalType: "address payable",
+            name: "seller",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "enum MarketPlace.ItemStatus",
+            name: "itemStatus",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct MarketPlace.MarketItem[]",
         name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "contributors",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",
@@ -124,87 +170,113 @@ export const contractABI = [
   },
   {
     inputs: [],
-    name: "deadline",
+    name: "fetchMyItemsOnSale",
     outputs: [
       {
-        internalType: "uint256",
+        components: [
+          {
+            internalType: "uint256",
+            name: "itemId",
+            type: "uint256",
+          },
+          {
+            components: [
+              {
+                internalType: "address",
+                name: "contractAddr",
+                type: "address",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+              },
+            ],
+            internalType: "struct MarketPlace.NFTToken",
+            name: "token",
+            type: "tuple",
+          },
+          {
+            internalType: "address payable",
+            name: "seller",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "price",
+            type: "uint256",
+          },
+          {
+            internalType: "enum MarketPlace.ItemStatus",
+            name: "itemStatus",
+            type: "uint8",
+          },
+        ],
+        internalType: "struct MarketPlace.MarketItem[]",
         name: "",
-        type: "uint256",
+        type: "tuple[]",
       },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
-    inputs: [],
-    name: "finalize",
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_itemId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_price",
+        type: "uint256",
+      },
+    ],
+    name: "relist",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [],
-    name: "goalAmount",
-    outputs: [
+    inputs: [
+      {
+        internalType: "address",
+        name: "_contractAddr",
+        type: "address",
+      },
       {
         internalType: "uint256",
-        name: "",
+        name: "_itemId",
         type: "uint256",
       },
     ],
-    stateMutability: "view",
+    name: "saleCancel",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [],
-    name: "isFunded",
-    outputs: [
+    inputs: [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "owner",
-    outputs: [
-      {
-        internalType: "address payable",
-        name: "",
+        internalType: "address",
+        name: "_contractAddr",
         type: "address",
       },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "raisedAmount",
-    outputs: [
       {
         internalType: "uint256",
-        name: "",
+        name: "_tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "_price",
         type: "uint256",
       },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "sbtRouterContract",
-    outputs: [
-      {
-        internalType: "contract SBTRouter",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
+    name: "sell",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
 ];

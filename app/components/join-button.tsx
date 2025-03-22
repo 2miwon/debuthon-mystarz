@@ -52,24 +52,32 @@ export default function JoinButton({
     }
   };
 
-  return (
-    <div className="w-full">
-      {type === "Marketplace" ? (
+  if (type === "RewardPass") {
+    return (
+      <div className="w-full relative">
         <button
-          className="w-full bg-white border border-[#EC407A] hover:bg-gray-100 text-[#EC407A] py-4 rounded-lg font-medium text-lg"
+          className="w-full text-white   bg-[#EC407A] hover:bg-pink-500  py-4 rounded-lg font-medium text-lg"
           onClick={handleJoin}
           disabled={isLoading}
         >
-          {isLoading
-            ? "Processing..."
-            : text !== undefined
-            ? text
-            : "Join the Initiative"}
-          <span className="pl-2.5">
-            {isLoading ? "" : subText !== undefined ? subText : ""}
-          </span>
+          <div className="grid">
+            {isLoading
+              ? "Processing..."
+              : text !== undefined
+              ? text
+              : "Join the Initiative"}
+            <span className=" text-xs">
+              {isLoading ? "" : subText !== undefined ? subText : ""}
+            </span>
+          </div>
         </button>
-      ) : (
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full relative">
+      {
         <button
           className="w-full bg-white border border-[#EC407A] hover:bg-gray-100 text-[#EC407A] py-4 rounded-lg font-medium text-lg"
           onClick={handleJoin}
@@ -84,10 +92,12 @@ export default function JoinButton({
             {isLoading ? "" : subText !== undefined ? subText : ""}
           </span>
         </button>
-      )}
+      }
 
       {message && (
-        <p className="mt-2 text-center text-sm text-gray-600">{message}</p>
+        <p className="absolute left-1/2 -translate-x-1/2 mt-2 text-center text-sm text-gray-600">
+          {message}
+        </p>
       )}
     </div>
   );

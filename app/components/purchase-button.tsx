@@ -31,64 +31,22 @@ export default function PurchaseButton() {
           address: contractAddress,
           abi: contractABI,
           functionName: "buy",
-          args: ["0x97785B0D26b0842375CF89e56a47679DfD5422E9", BigInt(1)],
+          args: ["0x7bDC5dCd118831d8AC895C753d76bB671eaB6482", BigInt(4)],
           value: BigInt(1),
         },
         {
           onSuccess(data) {
-            console.info("🚀 : purchase-button.tsx:38: data=", data);
-            setMessage("참여가 성공적으로 완료되었습니다!");
+            setMessage("Success to buy.");
             setIsLoading(false);
           },
           onError(error) {
-            console.info("🚀 : purchase-button.tsx:42: error=", error);
-            setMessage("다시 시도해주세요.");
+            setMessage("Try again.");
             setIsLoading(false);
           },
         },
       );
     } catch (error) {
-      console.info("🚀 : purchase-button.tsx:49: error=", error);
-      setMessage("요청에 실패했습니다.");
-      setIsLoading(false);
-    }
-  };
-
-  const handleFinal = async () => {
-    setIsLoading(true);
-    setMessage("");
-
-    if (!isConnected) {
-      // If not connected, trigger the wallet connection
-      connect({ connector: connectors[0] }); // Connect to the first available connector (e.g., MetaMask)
-      return;
-    }
-
-    const xrpAmount = 1;
-    // const drops = BigInt(xrpAmount * 1_000_000);
-    const drops = BigInt(xrpAmount * 1);
-
-    try {
-      writeContract(
-        {
-          address: contractAddress,
-          abi: contractABI,
-          functionName: "finalize",
-          value: BigInt(0),
-        },
-        {
-          onSuccess(data) {
-            setMessage("참여가 성공적으로 완료되었습니다!");
-            setIsLoading(false);
-          },
-          onError(error) {
-            setMessage("다시 시도해주세요.");
-            setIsLoading(false);
-          },
-        },
-      );
-    } catch (error) {
-      setMessage("요청에 실패했습니다.");
+      setMessage("Buy failed.");
       setIsLoading(false);
     }
   };
@@ -101,7 +59,7 @@ export default function PurchaseButton() {
         disabled={isLoading}
       >
         {isLoading ? (
-          "처리 중..."
+          "Processing..."
         ) : (
           <div>
             Buy <span className=" font-normal">{30} XRP</span>

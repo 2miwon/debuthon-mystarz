@@ -346,6 +346,7 @@ function Actions() {
         <JoinButton
           text="List for Sale"
           subText="You’ll be redirected to the listing page"
+          type="RewardPass"
         />
       </div>
     </div>
