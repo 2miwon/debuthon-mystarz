@@ -56,13 +56,13 @@ async fn make_app() -> Result<Router> {
 
     let app = Router::new()
         .route("/", get(|| async { "Axum running!" }))
-        .route("/test", get(test));
+        .route("/test", get(mint_test));
     // .nest("/funding", funding::Controller::new(conf, pool).router());
 
     Ok(app)
 }
 
-async fn test() -> String {
+async fn mint_test() -> String {
     // "OK"
     match api::min_nft(
         "0xB8Bb795b364550281feb9037e70E366CEa379290".to_string(),

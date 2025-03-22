@@ -1,14 +1,18 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+#![allow(unused_variables)]
 use crate::config;
+use rand::Rng;
 use reqwest::{Client, header};
 use serde_json::{Value, json};
 use std::error::Error;
-use uuid::Uuid;
 
 pub async fn min_nft(receiver: String, token_uri: String) -> Result<String, Box<dyn Error>> {
     let conf = config::Config::default();
-    let id = Uuid::new_v4().to_string();
     let client = Client::new();
+    let id: i64 = rand::rng().random_range(1_000_000_000_000..10_000_000_000_000);
 
+    tracing::info!("Generated ID: {}", id);
     let response = client
         .post(format!(
             "{}/v1/nft-kits/{}/issuances/issue?accountId={}",
@@ -22,7 +26,7 @@ pub async fn min_nft(receiver: String, token_uri: String) -> Result<String, Box<
             "issuanceObjects": [
                 {
                     "recipient": receiver,
-                    "tokenId": id,
+                    "tokenId": id.to_string(),
                     "tokenUri": token_uri.to_string(),
                 }
             ],
@@ -33,14 +37,20 @@ pub async fn min_nft(receiver: String, token_uri: String) -> Result<String, Box<
         .send()
         .await?;
 
-    let response_json: Value = response.json().await?;
-    tracing::info!("API response: {:?}", response_json);
-    if let Some(transaction_hash) = response_json
-        .get("transaction_hash")
-        .and_then(|v| v.as_str())
-    {
-        Ok(transaction_hash.to_string())
+    // let response_json: Value = response.json().await?;
+    // tracing::info!("API response: {:?}", response_json);
+    // if let Some(transaction_hash) = response_json
+    //     .get("transaction_hash")
+    //     .and_then(|v| v.as_str())
+    // {
+    //     Ok(transaction_hash.to_string())
+    // } else {
+    //     Err("Missing transaction_hash in response".into())
+    // }
+
+    if response.status().is_success() {
+        Ok(id.to_string())
     } else {
-        Err("Missing transaction_hash in response".into())
+        Err("API call failed".into())
     }
 }

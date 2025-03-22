@@ -19,3 +19,4 @@ ethers = "2.0.14"
 sqlx = { version = "0.8.3", features = ["sqlite", "runtime-tokio-native-tls"] }
 chrono = "0.4.40"
 uuid = "1.16.0"
+rand = "0.9.0"
