@@ -7,7 +7,7 @@ import { contractABI, contractAddress } from "../app/contractVoteConfig";
 
 export default function VoteButton() {
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("test");
+  const [message, setMessage] = useState("");
   const { isConnected } = useAccount();
   const { connect, connectors } = useConnect();
   const { writeContract } = useWriteContract();
