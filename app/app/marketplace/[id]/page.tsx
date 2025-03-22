@@ -288,23 +288,6 @@ function Description() {
             {/* <Play size={20} /> */}
           </button>
         </div>
-
-        <div className="text-right">
-          <span
-            className={`font-bold ${
-              campaign.fundingPercentage > 200
-                ? "text-rose-500"
-                : "text-rose-500"
-            }`}
-          >
-            {campaign.fundingPercentage}
-            {title === "Initiative"
-              ? "% Funded"
-              : title === "Coming Soon"
-              ? "Waiting"
-              : "XRP"}
-          </span>
-        </div>
       </div>
 
       <div className="mb-2">
@@ -339,11 +322,11 @@ function Actions() {
       </div>
 
       <div className="pt-5 flex gap-x-5">
-        <button className="w-full bg-white border border-[#EC407A] hover:bg-gray-100 text-[#EC407A] py-4 rounded-lg font-medium text-lg">
-          <span className="font-bold pr-2.5">Buy</span>
+        <PurchaseButton />
+        <button className="w-full bg-[#EC407A]   hover:bg-pink-500 text-white py-4 rounded-lg font-medium text-lg">
+          <span className="font-bold pr-2.5">Sell</span>
           30 XRP
         </button>
-        <PurchaseButton />
       </div>
     </div>
   );

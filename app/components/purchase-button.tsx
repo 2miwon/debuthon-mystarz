@@ -94,19 +94,18 @@ export default function PurchaseButton() {
   };
 
   return (
-    <div className="relative h-full">
+    <div className="relative h-full w-full">
       <button
-        className="bg-[#5ae2ad] w-full h-full hover:bg-[#4cd19c] text-white py-4 rounded-lg font-medium text-lg"
+        className="w-full h-full bg-white border border-[#EC407A] hover:bg-gray-100 text-[#EC407A] py-4 rounded-lg font-medium text-lg"
         onClick={handleJoin}
         disabled={isLoading}
       >
         {isLoading ? (
           "처리 중..."
         ) : (
-          <>
-            <div>Sell</div>
-            <div className="text-sm font-normal">{30} XRP</div>
-          </>
+          <div>
+            Buy <span className=" font-normal">{30} XRP</span>
+          </div>
         )}
       </button>
 

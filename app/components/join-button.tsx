@@ -24,12 +24,6 @@ export default function JoinButton({
     setIsLoading(true);
     setMessage("");
 
-    if (!isConnected) {
-      // If not connected, trigger the wallet connection
-      connect({ connector: connectors[0] }); // Connect to the first available connector (e.g., MetaMask)
-      return;
-    }
-
     const xrpAmount = 1_000_000_000_000;
     const drops = BigInt(xrpAmount * 1_000_000);
 
@@ -50,7 +44,7 @@ export default function JoinButton({
             setMessage("Try again.");
             setIsLoading(false);
           },
-        }
+        },
       );
     } catch (error) {
       setMessage("Process failed.");
