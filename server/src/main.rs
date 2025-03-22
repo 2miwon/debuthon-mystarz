@@ -8,7 +8,7 @@ use tokio_cron_scheduler::{Job, JobScheduler};
 
 pub mod api;
 pub mod config;
-// pub mod funding;
+pub mod funding;
 pub mod sqlite;
 
 #[tokio::main]
@@ -57,8 +57,8 @@ async fn make_app() -> Result<Router> {
 
     let app = Router::new()
         .route("/", get(|| async { "Axum running!" }))
-        .route("/test", get(mint_test));
-    // .route("/finalize", get(finalize_outer));
+        .route("/test", get(mint_test))
+        .route("/finalize", get(finalize_outer));
     // .nest("/funding", funding::Controller::new(conf, pool).router());
 
     Ok(app)
@@ -78,19 +78,22 @@ async fn mint_test() -> String {
 }
 
 async fn call_api(client: &Client) -> Result<(), Box<dyn std::error::Error>> {
+    use chrono::Utc;
+
     let conf = config::Config::default();
-    // use funding::ethers::{finalize_funding, get_funding_info};
+    use funding::ethers::{finalize_funding, get_funding_info};
 
-    // let response = get_funding_info(&conf.cont_addr, &conf.rpc_url).await?;
+    let response = get_funding_info().await?;
 
-    // tracing::info!("API response: {:?}", response);
+    let now = Utc::now();
+    tracing::info!("[{}]API response: {:?}", now, response);
     Ok(())
 }
 
-// async fn finalize_outer() -> String {
-//     let conf = config::Config::default();
-//     match funding::ethers::finalize_funding(conf.cont_addr, conf.cont_skey, &conf.rpc_url).await {
-//         Ok(_) => "finalized".to_string(),
-//         Err(e) => format!("Error: {}", e),
-//     }
-// }
+async fn finalize_outer() -> String {
+    let conf = config::Config::default();
+    match funding::ethers::finalize_funding(conf.cont_addr, conf.cont_skey, &conf.rpc_url).await {
+        Ok(_) => "finalized".to_string(),
+        Err(e) => format!("Error: {}", e),
+    }
+}

@@ -1,6 +1,7 @@
 API_URL ?= https://ag.eqhub.eqbr.com/api
 # CRON_SCHEDULE ?= "0 */5 * * * *"  # every 5 minutes
-CRON_SCHEDULE ?= "* * * * * *"  # every second for debug
+CRON_SCHEDULE ?= "*/10 * * * * *"  # every 10 seconds for debug
+# CRON_SCHEDULE ?= "* * * * * *"  # every second for debug
 PORT ?= 3000
 
 CARGO := cargo
@@ -76,3 +77,6 @@ help:
 	@echo "  CRON_SCHEDULE=$(CRON_SCHEDULE)"
 	@echo "  PORT=$(PORT)"
 	@echo "  BUILD_MODE=$(BUILD_MODE)"
+
+toolkit:
+	cd deps && node main.js
