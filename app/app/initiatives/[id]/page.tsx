@@ -1,6 +1,7 @@
 import { Header } from "@/components/header";
 import Image from "next/image";
 import { Heart, Share2, Gift } from "lucide-react";
+import JoinButton from "@/components/join-button";
 
 // This would typically come from a database or API
 const getCampaignById = (id: string) => {
@@ -145,9 +146,7 @@ export default async function CampaignDetailPage({
             </div>
 
             <div className="space-y-4">
-              <button className="w-full bg-[#5ae2ad] hover:bg-[#4cd19c] text-white py-4 rounded-lg font-medium text-lg">
-                이니셔티브 참여하기
-              </button>
+              <JoinButton />
 
               <div className="grid grid-cols-3 gap-4">
                 <button className="border border-gray-200 rounded-lg py-3 flex items-center justify-center">
