@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.28;
 import "./AchievementSBT.sol";
-import "./SBTRouter.sol";
 
 
 contract Funding {
@@ -12,7 +11,7 @@ contract Funding {
     uint256 public deadline;
     uint256 public goalAmount;
     bool public isFunded;
-    SBTRouter public sbtRouterContract;
+    AchievementSBT public sbtContract;
     address [] public contributors;
 
     event ContributionReceived(address indexed contributor, uint256 amount);
@@ -25,9 +24,9 @@ contract Funding {
         _;
     }
 
-    constructor (address _sbtRouterContract, uint256 _goalAmount, uint256 _duration, string memory _tokenURI){
+    constructor (address _sbtContract, uint256 _goalAmount, uint256 _duration, string memory _tokenURI){
         owner = payable(msg.sender);
-        sbtRouterContract = SBTRouter(_sbtRouterContract);
+        sbtContract = AchievementSBT(_sbtContract);
         goalAmount = _goalAmount;
         deadline = block.timestamp + _duration;
         isFunded = false;
@@ -58,7 +57,7 @@ contract Funding {
             // 펀딩 성공 시 모든 기여자에게 SBT 발급
             for (uint256 i = 0; i < contributors.length; i++) {
                 address contributor = contributors[i];
-                sbtRouterContract.mintSBT(contributor, SBTtokenURI); // 기여자에게 SBT 발급
+                sbtContract.Mint(contributor, SBTtokenURI); // 기여자에게 SBT 발급
             }
         } else {
              emit FundingFinalized(false, raisedAmount);

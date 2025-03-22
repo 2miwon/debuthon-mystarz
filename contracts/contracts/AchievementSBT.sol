@@ -4,25 +4,18 @@ pragma solidity ^0.8.13;
 import "erc5192/src/ERC5192.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract AchievementSBT is ERC5192,Ownable{
+
+contract AchievementSBT is ERC5192{
   bool private isLocked;
   uint256 private _tokenIds;
-  address public sbtRouter;
   mapping(uint256 => string) private _tokenURIs;
 
   event SBTMinted(address to, uint256 tokenId, string metadataJSON_url);
   event SBTUpdated(uint256 tokenId, string beforeURL, string afterURL );
   event locked(uint256 tokenId);
 
-  modifier onlyRouter() {
-    require(msg.sender == sbtRouter, "ONLY_ROUTER");
-    _;
-  } 
-  function setRouter(address _router) external onlyOwner {
-      sbtRouter = _router;
-  }
+ 
 
   constructor(string memory _name, string memory _symbol, bool _isLocked)
     ERC5192(_name, _symbol, _isLocked)
@@ -30,7 +23,7 @@ contract AchievementSBT is ERC5192,Ownable{
     isLocked = _isLocked;
   }
   
-  function Mint(address to, string memory _tokenURI) external onlyRouter {
+  function Mint(address to, string memory _tokenURI) external {
 
     _tokenIds +=1;
     uint256 newTokenId = _tokenIds;
@@ -50,7 +43,7 @@ contract AchievementSBT is ERC5192,Ownable{
       require(_exists(tokenId), "AchievementSBT: URI query for nonexistent token");
       return _tokenURIs[tokenId];
   }
-   function updateTokenURI(uint256 tokenId, string memory newTokenURI) external onlyRouter{
+   function updateTokenURI(uint256 tokenId, string memory newTokenURI) external{
     require(_exists(tokenId), "AchievementSBT: URI for nonexistent token");
 
     string memory oldTokenURI = _tokenURIs[tokenId]; 
