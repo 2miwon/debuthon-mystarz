@@ -1,7 +1,8 @@
+#![allow(unused_imports)]
+#![allow(unused_variables)]
 use anyhow::Result;
 use axum::{Router, routing::get};
-use reqwest::{Client, header};
-use serde_json::Value;
+use reqwest::Client;
 use tokio::net::TcpListener;
 use tokio_cron_scheduler::{Job, JobScheduler};
 
@@ -57,6 +58,7 @@ async fn make_app() -> Result<Router> {
     let app = Router::new()
         .route("/", get(|| async { "Axum running!" }))
         .route("/test", get(mint_test));
+    // .route("/finalize", get(finalize_outer));
     // .nest("/funding", funding::Controller::new(conf, pool).router());
 
     Ok(app)
@@ -75,19 +77,20 @@ async fn mint_test() -> String {
     }
 }
 
-async fn call_api(client: &Client) -> Result<()> {
+async fn call_api(client: &Client) -> Result<(), Box<dyn std::error::Error>> {
     let conf = config::Config::default();
-    // 여기에 API 호출 로직 구현
-    let response = client
-        .get(format!("{}/{}", conf.api_url, "v1/token-kits/kits/me"))
-        .header("x-eq-ag-api-key", conf.api_key)
-        .header(header::CONTENT_TYPE, "application/json")
-        .header(header::USER_AGENT, "reqwest")
-        // .header(header::CONNECTION, "close")
-        .send()
-        .await?;
+    // use funding::ethers::{finalize_funding, get_funding_info};
 
-    let json: Value = response.json().await?;
-    tracing::info!("API response: {:?}", json);
+    // let response = get_funding_info(&conf.cont_addr, &conf.rpc_url).await?;
+
+    // tracing::info!("API response: {:?}", response);
     Ok(())
 }
+
+// async fn finalize_outer() -> String {
+//     let conf = config::Config::default();
+//     match funding::ethers::finalize_funding(conf.cont_addr, conf.cont_skey, &conf.rpc_url).await {
+//         Ok(_) => "finalized".to_string(),
+//         Err(e) => format!("Error: {}", e),
+//     }
+// }

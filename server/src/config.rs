@@ -9,6 +9,8 @@ pub struct Config {
     pub api_pw: &'static str,
     pub api_skey: &'static str,
     pub api_nft_kit_id: &'static str,
+    pub cont_addr: &'static str,
+    pub cont_skey: &'static str,
 }
 
 impl Default for Config {
@@ -23,6 +25,8 @@ impl Default for Config {
             api_pw: option_env!("API_PW").expect("API_PW is required"),
             api_skey: option_env!("API_SKEY").expect("API_SKEY is required"),
             api_nft_kit_id: option_env!("API_NFT_KIT_ID").unwrap_or("30"),
+            cont_addr: option_env!("CONTRACT_ADDR").expect("CONT_ADDR is required"),
+            cont_skey: option_env!("CONTRACT_SKEY").expect("CONTRACT_SKEY is required"),
         }
     }
 }

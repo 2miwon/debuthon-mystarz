@@ -1,82 +1,301 @@
 use chrono::{DateTime, Utc};
-use ethers::contract::abigen;
-use ethers::prelude::*;
-use ethers::types::U256;
-use funty::Fundamental;
 use std::str::FromStr;
-use std::sync::Arc;
+use web3::Web3;
+use web3::contract::{Contract, Options};
+use web3::signing::SecretKey;
+use web3::types::{Address, H160, TransactionParameters, U256};
 
-// Funding 컨트랙트와 상호작용하기 위한 ABI 생성
-abigen!(
-    FundingContract,
-    r#"[
-        constructor(address _sbtRouterContract, uint256 _goalAmount, uint256 _duration, string memory _tokenURI)
-        function SBTtokenURI() external view returns (string)
-        function contribute() external payable
-        function contribution(address) external view returns (uint256)
-        function contributors(uint256) external view returns (address)
-        function deadline() external view returns (uint256)
-        function finalize() external
-        function goalAmount() external view returns (uint256)
-        function isFunded() external view returns (bool)
-        function owner() external view returns (address payable)
-        function raisedAmount() external view returns (uint256)
-        function sbtRouterContract() external view returns (address)
-    ]"#
-);
-
+// Funding 정보를 담을 구조체
 #[derive(Debug, Clone)]
 pub struct FundingInfo {
-    pub address: Address,
-    pub owner: Address,
+    pub address: H160,
+    pub owner: H160,
     pub raised_amount: U256,
     pub goal_amount: U256,
     pub deadline: U256,
     pub deadline_date: DateTime<Utc>,
     pub is_funded: bool,
-    // pub token_uri: String,
-    pub contributors: Vec<Address>,
-    pub contributions: Vec<(Address, U256)>,
+    pub contributors: Vec<H160>,
+    pub contributions: Vec<(H160, U256)>,
 }
 
-pub async fn get_funding_info(
-    contract_address: &str,
-    rpc_url: &str,
-) -> Result<FundingInfo, Box<dyn std::error::Error>> {
-    // 프로바이더 설정
-    let provider = Provider::<Http>::try_from(rpc_url)?;
-    let provider = Arc::new(provider);
+// ABI 파일 로드 (JSON 문자열)
+const FUNDING_ABI: &str = r#"[
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_sbtRouterContract",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_goalAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_duration",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_tokenURI",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "contributor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ContributionReceived",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "success",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "totalRaised",
+          "type": "uint256"
+        }
+      ],
+      "name": "FundingFinalized",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "SBTtokenURI",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "contribute",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "contribution",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "contributors",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "deadline",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "finalize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "goalAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isFunded",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address payable",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "raisedAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "sbtRouterContract",
+      "outputs": [
+        {
+          "internalType": "contract SBTRouter",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]"#;
 
-    // 문자열 주소를 Address 타입으로 변환
-    let address = Address::from_str(contract_address)?;
+// 펀딩 정보 조회 함수
+pub async fn get_funding_info(contract_address: &str, rpc_url: &str) -> web3::Result<FundingInfo> {
+    // 웹3 인스턴스 생성
+    let transport = web3::transports::Http::new(rpc_url)?;
+    let web3 = Web3::new(transport);
+
+    // 컨트랙트 주소 파싱
+    let address = H160::from_str(contract_address).expect("유효하지 않은 주소");
 
     // 컨트랙트 인스턴스 생성
-    let funding = FundingContract::new(address, provider);
+    let contract = Contract::from_json(web3.eth(), address, FUNDING_ABI.as_bytes())?;
 
-    // 컨트랙트 정보 가져오기
-    let owner = funding.owner().call().await?;
-    let raised_amount = funding.raised_amount().call().await?;
-    let goal_amount = funding.goal_amount().call().await?;
-    let deadline = funding.deadline().call().await?;
-    let is_funded = funding.is_funded().call().await?;
-    // let token_uri = funding.sbt_token_uri().call().await?;
+    // 컨트랙트 정보 조회
+    let owner: H160 = contract
+        .query("owner", (), None, Options::default(), None)
+        .await?;
+    let raised_amount: U256 = contract
+        .query("raisedAmount", (), None, Options::default(), None)
+        .await?;
+    let goal_amount: U256 = contract
+        .query("goalAmount", (), None, Options::default(), None)
+        .await?;
+    let deadline: U256 = contract
+        .query("deadline", (), None, Options::default(), None)
+        .await?;
+    let is_funded: bool = contract
+        .query("isFunded", (), None, Options::default(), None)
+        .await?;
 
-    // 타임스탬프를 사람이 읽을 수 있는 날짜로 변환
+    // 타임스탬프를 날짜로 변환
     let deadline_secs = deadline.as_u64() as i64;
     let deadline_date =
         DateTime::<Utc>::from_timestamp(deadline_secs, 0).unwrap_or_else(|| Utc::now());
 
-    // 기여자 목록 가져오기
+    // 기여자 목록 조회
     let mut contributors = Vec::new();
     let mut contributions = Vec::new();
     let mut index = 0u64;
 
     loop {
-        match funding.contributors(U256::from(index)).call().await {
+        let result: Result<H160, _> = contract
+            .query(
+                "contributors",
+                (U256::from(index),),
+                None,
+                Options::default(),
+                None,
+            )
+            .await;
+
+        match result {
             Ok(contributor) => {
                 contributors.push(contributor);
 
-                if let Ok(amount) = funding.contribution(contributor).call().await {
+                // 기여 금액 조회
+                let amount: Result<U256, _> = contract
+                    .query(
+                        "contribution",
+                        (contributor,),
+                        None,
+                        Options::default(),
+                        None,
+                    )
+                    .await;
+
+                if let Ok(amount) = amount {
                     contributions.push((contributor, amount));
                 }
 
@@ -86,6 +305,7 @@ pub async fn get_funding_info(
         }
     }
 
+    // FundingInfo 구조체 반환
     Ok(FundingInfo {
         address,
         owner,
@@ -94,185 +314,149 @@ pub async fn get_funding_info(
         deadline,
         deadline_date,
         is_funded,
-        // token_uri,
         contributors,
         contributions,
     })
 }
 
-pub fn print_funding_info(funding: &FundingInfo) {
-    println!("===== Funding 컨트랙트 정보 =====");
-    println!("주소: {}", funding.address);
-    println!("소유자: {}", funding.owner);
-    println!(
-        "목표 금액: {} wei ({} ETH)",
-        funding.goal_amount,
-        ethers::utils::format_ether(funding.goal_amount)
-    );
-    println!(
-        "모인 금액: {} wei ({} ETH)",
-        funding.raised_amount,
-        ethers::utils::format_ether(funding.raised_amount)
-    );
-    println!(
-        "마감 시간: {} ({})",
-        funding.deadline, funding.deadline_date
-    );
-    println!("펀딩 완료 여부: {}", funding.is_funded);
-    // println!("SBT 토큰 URI: {}", funding.token_uri);
-    println!("기여자 수: {}", funding.contributors.len());
-
-    // 펀딩 진행률 계산
-    let progress = if funding.goal_amount.is_zero() {
-        100.0
-    } else {
-        (funding.raised_amount.as_u128() as f64 / funding.goal_amount.as_u128() as f64) * 100.0
-    };
-
-    println!("펀딩 진행률: {:.2}%", progress);
-
-    // 남은 시간 계산
-    let now = Utc::now().timestamp() as u64;
-    let deadline_secs = funding.deadline.as_u64();
-
-    if now < deadline_secs {
-        let remaining = deadline_secs - now;
-        let days = remaining / 86400;
-        let hours = (remaining % 86400) / 3600;
-        let minutes = (remaining % 3600) / 60;
-        println!("남은 시간: {}일 {}시간 {}분", days, hours, minutes);
-    } else {
-        println!("펀딩 기간 종료");
-    }
-
-    // 기여자 목록 출력
-    println!("\n기여자 목록:");
-    for (i, (contributor, amount)) in funding.contributions.iter().enumerate() {
-        println!(
-            "  {}. {} - {} wei ({} ETH)",
-            i + 1,
-            contributor,
-            amount,
-            ethers::utils::format_ether(*amount)
-        );
-    }
-}
-
+// 펀딩에 기여하기
 pub async fn contribute_to_funding(
     contract_address: &str,
     private_key: &str,
     amount: i128,
     rpc_url: &str,
-) -> Result<(), Box<dyn std::error::Error>> {
-    // 프로바이더 설정
-    let provider = Provider::<Http>::try_from(rpc_url)?;
-    let provider = Arc::new(provider);
+) -> web3::Result<()> {
+    // 웹3 인스턴스 생성
+    let transport = web3::transports::Http::new(rpc_url)?;
+    let web3 = Web3::new(transport);
 
-    // 지갑 설정
-    let wallet = private_key.parse::<LocalWallet>()?;
-    let client = SignerMiddleware::new(provider, wallet);
-    let client = Arc::new(client);
+    // 개인 키로 계정 생성
+    let private_key = private_key.trim_start_matches("0x");
+    let private_key_bytes = hex::decode(private_key).expect("유효하지 않은 개인 키");
+    let secret_key = SecretKey::from_slice(&private_key_bytes)?;
 
-    // 컨트랙트 주소 파싱
-    let address = Address::from_str(contract_address)?;
+    // 계정 주소 계산
+    let address = secret_key.address();
 
-    // 컨트랙트 인스턴스 생성
-    let contract = FundingContract::new(address, client.clone());
+    // 컨트랙트 주소
+    let contract_address = H160::from_str(contract_address).expect("유효하지 않은 계약 주소");
 
-    // 기여 트랜잭션 보내기
-    println!("{}Wei 만큼 기여하는 중...", amount);
-    let amount = U256::from(amount as u128);
-    let tx = contract.contribute().value(amount);
-    let pending_tx = tx.send().await?;
+    // 컨트랙트 인스턴스
+    let contract = Contract::from_json(web3.eth(), contract_address, FUNDING_ABI.as_bytes())?;
 
-    // 트랜잭션 영수증 가져오기
-    let receipt = pending_tx.await?;
-    println!("기여 완료: 트랜잭션 해시 = {:?}", receipt.transaction_hash);
+    // 트랜잭션 데이터 생성
+    let data = contract
+        .abi()
+        .function("contribute")
+        .expect("함수를 찾을 수 없음")
+        .encode_input(&[])?;
+
+    // 가스 가격
+    let gas_price = web3.eth().gas_price().await?;
+
+    // 논스 가져오기
+    let nonce = web3.eth().transaction_count(address, None).await?;
+
+    // 트랜잭션 파라미터 구성
+    let tx_params = TransactionParameters {
+        to: Some(contract_address),
+        value: U256::from(amount as u128),
+        gas_price: Some(gas_price),
+        gas: U256::from(200_000),
+        nonce: Some(nonce),
+        data: data,
+        chain_id: Some(1440002), // 체인 ID 설정
+        ..Default::default()
+    };
+
+    // 트랜잭션 서명 및 전송
+    let signed = web3
+        .accounts()
+        .sign_transaction(tx_params, &secret_key)
+        .await?;
+    let tx_hash = web3
+        .eth()
+        .send_raw_transaction(signed.raw_transaction)
+        .await?;
+
+    println!("기여 트랜잭션 해시: {:?}", tx_hash);
+
+    let receipt = web3.eth().transaction_receipt(tx_hash).await?;
+    if let Some(receipt) = receipt {
+        println!("트랜잭션이 블록에 포함됨: {:?}", receipt.block_number);
+    }
 
     Ok(())
 }
 
-// 펀딩 종료(finalize) 함수
+// 펀딩 종료(finalize)
 pub async fn finalize_funding(
     contract_address: &str,
     private_key: &str,
     rpc_url: &str,
-) -> Result<(), Box<dyn std::error::Error>> {
-    // 프로바이더 설정
-    let provider = Provider::<Http>::try_from(rpc_url)?;
-    let provider = Arc::new(provider);
+) -> web3::Result<()> {
+    // 웹3 인스턴스 생성
+    let transport = web3::transports::Http::new(rpc_url)?;
+    let web3 = Web3::new(transport);
 
-    // 지갑 설정
-    let wallet = private_key.parse::<LocalWallet>()?;
-    let client = SignerMiddleware::new(provider, wallet);
-    let client = Arc::new(client);
+    // 개인 키로 계정 생성
+    let private_key = private_key.trim_start_matches("0x");
+    let private_key_bytes = hex::decode(private_key).expect("유효하지 않은 개인 키");
+    let secret_key = SecretKey::from_slice(&private_key_bytes)?;
 
-    // 컨트랙트 주소 파싱
-    let address = Address::from_str(contract_address)?;
+    // 계정 주소 계산
+    let address = secret_key.address();
+    tracing::info!("발신자 주소: {:?}", address);
 
-    // 컨트랙트 인스턴스 생성
-    let contract = FundingContract::new(address, client.clone());
+    // 컨트랙트 주소
+    let contract_address = H160::from_str(contract_address).expect("유효하지 않은 계약 주소");
 
-    // 펀딩 종료 트랜잭션 보내기
-    let tx = contract.finalize();
-    let pending_tx = tx.send().await?;
+    // 컨트랙트 인스턴스
+    let contract = Contract::from_json(web3.eth(), contract_address, FUNDING_ABI.as_bytes())?;
 
-    // 트랜잭션 영수증 가져오기
-    let receipt = match pending_tx.await? {
-        TransactionReceipt::Mined(receipt) => receipt,
-        _ => tracing::error!("their are no mined receipt"),
+    // 트랜잭션 데이터 생성
+    let data = contract
+        .abi()
+        .function("finalize")
+        .expect("함수를 찾을 수 없음")
+        .encode_input(&[])?;
+
+    // 가스 가격
+    let gas_price = web3.eth().gas_price().await?;
+
+    // 논스 가져오기
+    let nonce = web3.eth().transaction_count(address, None).await?;
+
+    // 트랜잭션 파라미터 구성
+    let tx_params = TransactionParameters {
+        to: Some(contract_address),
+        value: U256::from(0),
+        gas_price: Some(gas_price),
+        gas: U256::from(500_000),
+        nonce: Some(nonce),
+        data: data,
+        chain_id: Some(1440002), // 체인 ID 설정
+        ..Default::default()
     };
 
-    Ok(receipt.transaction_hash)
-}
+    tracing::info!("finalize 트랜잭션 준비 중...");
 
-pub async fn deploy_new_funding(
-    private_key: &str,
-    rpc_url: &str,
-    sbt_router_address: &str,
-    goal_amount: i128,
-    duration_seconds: i128,
-    token_uri: String,
-) -> Result<Address, Box<dyn std::error::Error>> {
-    // 프로바이더 설정
-    let provider = Provider::<Http>::try_from(rpc_url)?;
-    let provider = Arc::new(provider);
-
-    // 지갑 설정
-    let wallet = private_key.parse::<LocalWallet>()?;
-    let chain_id = provider.get_chainid().await?.as_u64();
-    let wallet = wallet.with_chain_id(chain_id);
-
-    // 클라이언트 설정
-    let client = SignerMiddleware::new(provider, wallet);
-    let client = Arc::new(client);
-
-    // SBT 라우터 주소 변환
-    let sbt_router = sbt_router_address.parse::<Address>()?;
-
-    println!("새로운 Funding 컨트랙트 배포 중...");
-    println!("SBT Router 주소: {}", sbt_router);
-    println!("목표 금액: {} Wei", goal_amount);
-    println!(
-        "펀딩 기간: {} 초 ({:.1} 일)",
-        duration_seconds,
-        duration_seconds.as_f64() as f64 / 86400.0
-    );
-    // println!("토큰 URI: {}", token_uri);
-
-    let goal_amount = U256::from(goal_amount as u128);
-    let duration_seconds = U256::from(duration_seconds as u128);
-    // 컨트랙트 배포
-    let constructor_args = (sbt_router, goal_amount, duration_seconds, token_uri);
-
-    let factory = FundingContract::deploy(client, constructor_args)?
-        .gas(5_000_000u64) // 가스 한도 설정
-        .send()
+    // 트랜잭션 서명 및 전송
+    let signed = web3
+        .accounts()
+        .sign_transaction(tx_params, &secret_key)
+        .await?;
+    let tx_hash = web3
+        .eth()
+        .send_raw_transaction(signed.raw_transaction)
         .await?;
 
-    let contract_address = factory.address();
-    println!("Funding 컨트랙트 배포 완료!");
-    println!("컨트랙트 주소: {}", contract_address);
+    tracing::info!("finalize 트랜잭션 해시: {:?}", tx_hash);
 
-    Ok(contract_address)
+    let receipt = web3.eth().transaction_receipt(tx_hash).await?;
+    if let Some(receipt) = receipt {
+        tracing::info!("트랜잭션이 블록에 포함됨: {:?}", receipt.block_number);
+    }
+
+    Ok(())
 }
