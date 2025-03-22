@@ -1,6 +1,6 @@
-API_URL ?= https://ag.eqhub.eqbr.com/api/v2
-# CRON_SCHEDULE ?= "0 */5 * * * *"  # every 5 minutes
-CRON_SCHEDULE ?= "* * * * * *"  # every second for debug
+API_URL ?= https://ag.eqhub.eqbr.com/api
+CRON_SCHEDULE ?= "0 */5 * * * *"  # every 5 minutes
+# CRON_SCHEDULE ?= "* * * * * *"  # every second for debug
 PORT ?= 3000
 
 CARGO := cargo
@@ -17,7 +17,7 @@ build:
 	$(CARGO) build $(RELEASE_FLAG)
 
 run: build
-	API_URL=$(API_URL) CRON_SCHEDULE=$(CRON_SCHEDULE) PORT=$(PORT) \
+	API_URL=$(API_URL) CRON_SCHEDULE=$(CRON_SCHEDULE) PORT=$(PORT) RUST_LOG="info" \
 	cargo watch -x run
 
 test:

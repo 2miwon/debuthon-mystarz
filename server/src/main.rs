@@ -1,10 +1,14 @@
 use anyhow::Result;
 use axum::{Router, routing::get};
-use reqwest::Client;
+use reqwest::{Client, header};
+use serde_json::Value;
 use tokio::net::TcpListener;
 use tokio_cron_scheduler::{Job, JobScheduler};
 
+pub mod api;
 pub mod config;
+// pub mod funding;
+pub mod sqlite;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -32,6 +36,7 @@ async fn main() -> Result<()> {
 
 async fn make_app() -> Result<Router> {
     let conf = config::Config::default();
+    // let _pool = sqlite::Database::new("sqlite://db/contracts.db").await?;
     let client = Client::new();
 
     let scheduler = JobScheduler::new().await?;
@@ -51,25 +56,38 @@ async fn make_app() -> Result<Router> {
 
     let app = Router::new()
         .route("/", get(|| async { "Axum running!" }))
-        .route("/health", get(health_check));
+        .route("/test", get(test));
+    // .nest("/funding", funding::Controller::new(conf, pool).router());
 
     Ok(app)
 }
 
-async fn health_check() -> &'static str {
-    "OK"
+async fn test() -> String {
+    // "OK"
+    match api::min_nft(
+        "0xB8Bb795b364550281feb9037e70E366CEa379290".to_string(),
+        "https://example.com".to_string(),
+    )
+    .await
+    {
+        Ok(hash) => hash,
+        Err(e) => format!("Error: {}", e),
+    }
 }
 
 async fn call_api(client: &Client) -> Result<()> {
     let conf = config::Config::default();
     // 여기에 API 호출 로직 구현
-    let response = client.get(conf.api_url).send().await?;
+    let response = client
+        .get(format!("{}/{}", conf.api_url, "v1/token-kits/kits/me"))
+        .header("x-eq-ag-api-key", conf.api_key)
+        .header(header::CONTENT_TYPE, "application/json")
+        .header(header::USER_AGENT, "reqwest")
+        // .header(header::CONNECTION, "close")
+        .send()
+        .await?;
 
-    if response.status().is_success() {
-        tracing::info!("API call successful: {:?}", response.status());
-    } else {
-        tracing::warn!("API call returned non-success: {:?}", response.status());
-    }
-
+    let json: Value = response.json().await?;
+    tracing::info!("API response: {:?}", json);
     Ok(())
 }
