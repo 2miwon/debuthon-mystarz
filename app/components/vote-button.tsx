@@ -91,7 +91,7 @@ export default function VoteButton() {
   };
 
   return (
-    <div className="relative h-full flex justify-center -mt-20">
+    <div className="relative h-full flex justify-center -mt-[60px]">
       <button
         className="bg-pink-700 flex items-center justify-center w-[180px] h-[40px] hover:bg-pink-900 text-white py-4 rounded-lg font-medium text-lg"
         onClick={handleJoin}
