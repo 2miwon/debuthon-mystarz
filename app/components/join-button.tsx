@@ -50,7 +50,7 @@ export default function JoinButton({
             setMessage("Try again.");
             setIsLoading(false);
           },
-        },
+        }
       );
     } catch (error) {
       setMessage("Process failed.");
@@ -62,7 +62,7 @@ export default function JoinButton({
     <div className="w-full">
       {type === "Marketplace" ? (
         <button
-          className="w-full bg-[#EC407A] hover:bg-pink-500 text-white py-4 rounded-lg font-medium text-lg"
+          className="w-full bg-white border border-[#EC407A] hover:bg-gray-100 text-[#EC407A] py-4 rounded-lg font-medium text-lg"
           onClick={handleJoin}
           disabled={isLoading}
         >
@@ -77,7 +77,7 @@ export default function JoinButton({
         </button>
       ) : (
         <button
-          className="w-full grid bg-[#EC407A] hover:bg-pink-500 text-white py-4 rounded-lg font-medium text-lg"
+          className="w-full bg-white border border-[#EC407A] hover:bg-gray-100 text-[#EC407A] py-4 rounded-lg font-medium text-lg"
           onClick={handleJoin}
           disabled={isLoading}
         >
@@ -85,7 +85,7 @@ export default function JoinButton({
             ? "Processing..."
             : text !== undefined
             ? text
-            : "Pay with RLUSD"}
+            : "Send Support"}
           <span className="text-xs">
             {isLoading ? "" : subText !== undefined ? subText : ""}
           </span>

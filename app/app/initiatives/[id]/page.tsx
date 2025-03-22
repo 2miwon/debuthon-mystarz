@@ -350,8 +350,8 @@ function Actions() {
       </div>
 
       <div className="pt-5 flex gap-x-5">
-        <BridgeModal />
         <JoinButton />
+        <BridgeModal />
       </div>
     </div>
   );

@@ -47,14 +47,14 @@ export default function BridgeButton({ text }: { text?: string }) {
   return (
     <>
       <button
-        className="w-full bg-white border border-[#EC407A] hover:bg-gray-100 text-[#EC407A] py-4 rounded-lg font-medium text-lg"
+        className="w-full bg-[#EC407A] hover:bg-pink-500 text-white py-4 rounded-lg font-medium text-lg"
         onClick={openModal}
       >
         {isProcessing
           ? "Processing..."
           : text !== undefined
           ? text
-          : "Send Support"}
+          : "Pay with RLUSD"}
       </button>
 
       {isModalOpen &&
