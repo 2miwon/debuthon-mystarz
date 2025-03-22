@@ -1,6 +1,6 @@
-import { Header } from "@/components/header"
-import Image from "next/image"
-import { Heart, Share2, Gift } from "lucide-react"
+import { Header } from "@/components/header";
+import Image from "next/image";
+import { Heart, Share2, Gift } from "lucide-react";
 
 // This would typically come from a database or API
 const getCampaignById = (id: string) => {
@@ -16,43 +16,52 @@ const getCampaignById = (id: string) => {
       participants: 516,
       fundingAmount: 25800000,
       rewardType: "리싸이클링 NJZ 키링",
-      quote: "NJZ는 대한민국의 5인조 다국적 걸그룹으로 5명의 멤버가 모여 자유분방하면서도 독특한 퍼포먼스를 선보인다.",
-      image: "/placeholder.svg?height=500&width=800",
+      quote:
+        "NJZ는 대한민국의 5인조 다국적 걸그룹으로 5명의 멤버가 모여 자유분방하면서도 독특한 퍼포먼스를 선보인다.",
+      image: "/njz.png?height=500&width=800",
     },
     "38": {
       id: "38",
       title: "번우석과 함께하는 주거 취약계층 지원 이니셔티브",
-      description: "배우 번우석과 함께 주거 취약계층을 위한 지원 프로젝트에 동참해주세요.",
+      description:
+        "배우 번우석과 함께 주거 취약계층을 위한 지원 프로젝트에 동참해주세요.",
       daysLeft: 7,
       artist: "번우석",
       fundingPercentage: 210,
       participants: 320,
       fundingAmount: 21000000,
       rewardType: "번우석 사인 텀블러",
-      quote: "번우석은 다양한 작품을 통해 연기력을 인정받은 배우로, 사회 공헌 활동에도 적극적으로 참여하고 있습니다.",
-      image: "/placeholder.svg?height=500&width=800",
+      quote:
+        "번우석은 다양한 작품을 통해 연기력을 인정받은 배우로, 사회 공헌 활동에도 적극적으로 참여하고 있습니다.",
+      image: "/njz.png?height=500&width=800",
     },
     "39": {
       id: "39",
       title: "손홍민과 함께하는 장애 아동 축구 캠프 이니셔티브",
-      description: "축구선수 손홍민과 함께 장애 아동들에게 축구의 즐거움을 선사하는 캠프를 개최합니다.",
+      description:
+        "축구선수 손홍민과 함께 장애 아동들에게 축구의 즐거움을 선사하는 캠프를 개최합니다.",
       daysLeft: 29,
       artist: "손홍민",
       fundingPercentage: 77,
       participants: 150,
       fundingAmount: 7700000,
       rewardType: "손홍민 사인 축구공",
-      quote: "손홍민은 세계적인 축구 선수로, 장애 아동들에게 스포츠의 즐거움을 전하고자 이 프로젝트를 시작했습니다.",
-      image: "/placeholder.svg?height=500&width=800",
+      quote:
+        "손홍민은 세계적인 축구 선수로, 장애 아동들에게 스포츠의 즐거움을 전하고자 이 프로젝트를 시작했습니다.",
+      image: "/njz.png?height=500&width=800",
     },
-  }
+  };
 
-  return campaigns[id as keyof typeof campaigns]
-}
+  return campaigns[id as keyof typeof campaigns];
+};
 
-export default async function CampaignDetailPage({ params }: { params: { id: string } }) {
-  const { id } = await params
-  const campaign = getCampaignById(id)
+export default async function CampaignDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const { id } = await params;
+  const campaign = getCampaignById(id);
 
   if (!campaign) {
     return (
@@ -62,7 +71,7 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
           <h1 className="text-2xl font-bold">캠페인을 찾을 수 없습니다</h1>
         </main>
       </div>
-    )
+    );
   }
 
   return (
@@ -73,7 +82,12 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
           {/* Left column - Campaign Image */}
           <div>
             <div className="relative h-[400px] w-full rounded-lg overflow-hidden mb-6">
-              <Image src={campaign.image || "/placeholder.svg"} alt={campaign.title} fill className="object-cover" />
+              <Image
+                src={campaign.image || "/placeholder.svg"}
+                alt={campaign.title}
+                fill
+                className="object-cover"
+              />
             </div>
 
             <div className="border border-gray-200 rounded-lg p-4 mb-6">
@@ -93,7 +107,9 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
               <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">
                 마감 D-{campaign.daysLeft}
               </span>
-              <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">소속사 {campaign.artist}</span>
+              <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm">
+                소속사 {campaign.artist}
+              </span>
             </div>
 
             <h1 className="text-3xl font-bold mb-2">{campaign.title}</h1>
@@ -101,7 +117,9 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
 
             <div className="mb-6">
               <div className="flex items-center mb-2">
-                <span className="text-4xl font-bold text-[#5ae2ad]">{campaign.fundingPercentage}% 달성</span>
+                <span className="text-4xl font-bold text-[#5ae2ad]">
+                  {campaign.fundingPercentage}% 달성
+                </span>
                 <span className="ml-4 bg-[#dcf9ee] text-[#5ae2ad] px-3 py-1 rounded-full text-sm">
                   {campaign.participants}명 참여
                 </span>
@@ -109,10 +127,14 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
               <div className="w-full bg-gray-200 h-2 rounded-full mb-2">
                 <div
                   className="bg-[#5ae2ad] h-2 rounded-full"
-                  style={{ width: `${Math.min(campaign.fundingPercentage, 100)}%` }}
+                  style={{
+                    width: `${Math.min(campaign.fundingPercentage, 100)}%`,
+                  }}
                 ></div>
               </div>
-              <p className="text-2xl font-bold mb-6">{campaign.fundingAmount.toLocaleString()}원 달성</p>
+              <p className="text-2xl font-bold mb-6">
+                {campaign.fundingAmount.toLocaleString()}원 달성
+              </p>
             </div>
 
             <div className="flex items-center mb-8">
@@ -145,6 +167,5 @@ export default async function CampaignDetailPage({ params }: { params: { id: str
         </div>
       </main>
     </div>
-  )
+  );
 }
-
