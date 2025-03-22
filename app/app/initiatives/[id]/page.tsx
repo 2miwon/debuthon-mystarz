@@ -4,6 +4,7 @@ import { Heart, Share2, Gift, ChevronLeft } from "lucide-react";
 import JoinButton from "@/components/join-button";
 import { CampaignList } from "@/components/campaign-list";
 import Link from "next/link";
+import BridgeModal from "@/components/bridge-modal";
 
 // This would typically come from a database or API
 const getCampaignById = (id: string) => {
@@ -349,9 +350,7 @@ function Actions() {
       </div>
 
       <div className="pt-5 flex gap-x-5">
-        <button className="w-full bg-white border border-[#EC407A] hover:bg-gray-100 text-[#EC407A] py-4 rounded-lg font-medium text-lg">
-          Send Support
-        </button>
+        <BridgeModal />
         <JoinButton />
       </div>
     </div>
