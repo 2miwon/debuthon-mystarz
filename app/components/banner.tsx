@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useState } from "react";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface BannerSlide {
-  id: number
-  image: string
-  title: string
-  subtitle: string
+  id: number;
+  image: string;
+  title: string;
+  subtitle: string;
 }
 
 export function Banner() {
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides: BannerSlide[] = [
     {
       id: 1,
-      image: "/placeholder.svg?height=400&width=1200",
+      image: "/bts.png?height=400&width=1200",
       title: "BTS와 함께하는",
       subtitle: "미래 세대를 위한 지속가능 발전 이니셔티브",
     },
     {
       id: 2,
-      image: "/placeholder.svg?height=400&width=1200",
+      image: "/njz.png?height=400&width=1200",
       title: "새로운 캠페인",
       subtitle: "함께 만들어가는 더 나은 미래",
     },
-  ]
+  ];
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
-  }
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1))
-  }
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
 
   return (
     <div className="relative w-full h-[300px] mb-8 overflow-hidden rounded-lg">
@@ -48,7 +48,7 @@ export function Banner() {
         >
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
           <Image
-            src={slide.image || "/placeholder.svg"}
+            src={slide.image || "/njz.png"}
             alt={slide.title}
             fill
             className="object-cover"
@@ -82,12 +82,13 @@ export function Banner() {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-2 h-2 rounded-full ${index === currentSlide ? "bg-white" : "bg-white/50"}`}
+            className={`w-2 h-2 rounded-full ${
+              index === currentSlide ? "bg-white" : "bg-white/50"
+            }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
       </div>
     </div>
-  )
+  );
 }
-

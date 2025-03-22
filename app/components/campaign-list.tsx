@@ -1,41 +1,44 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Heart, Circle, Play, ChevronLeft, ChevronRight } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
+import { useState } from "react";
+import { Heart, Circle, Play, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 interface Campaign {
-  id: string
-  creator: string
-  daysLeft: number
-  title: string
-  description: string
-  fundingPercentage: number
-  fundingAmount: number
-  tags: string[]
-  image: string
+  id: string;
+  creator: string;
+  daysLeft: number;
+  title: string;
+  description: string;
+  fundingPercentage: number;
+  fundingAmount: number;
+  tags: string[];
+  image: string;
 }
 
 interface CampaignListProps {
-  title: string
-  campaigns: Campaign[]
+  title: string;
+  campaigns: Campaign[];
 }
 
 export function CampaignList({ title, campaigns }: CampaignListProps) {
-  const [visibleIndex, setVisibleIndex] = useState(0)
-  const itemsPerPage = 3
-  const maxIndex = Math.max(0, campaigns.length - itemsPerPage)
+  const [visibleIndex, setVisibleIndex] = useState(0);
+  const itemsPerPage = 3;
+  const maxIndex = Math.max(0, campaigns.length - itemsPerPage);
 
   const nextSlide = () => {
-    setVisibleIndex((prev) => Math.min(prev + 1, maxIndex))
-  }
+    setVisibleIndex((prev) => Math.min(prev + 1, maxIndex));
+  };
 
   const prevSlide = () => {
-    setVisibleIndex((prev) => Math.max(prev - 1, 0))
-  }
+    setVisibleIndex((prev) => Math.max(prev - 1, 0));
+  };
 
-  const visibleCampaigns = campaigns.slice(visibleIndex, visibleIndex + itemsPerPage)
+  const visibleCampaigns = campaigns.slice(
+    visibleIndex,
+    visibleIndex + itemsPerPage,
+  );
 
   return (
     <div className="mb-12">
@@ -55,23 +58,27 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
             </div>
 
             <Link href={`/initiatives/${campaign.id}`} className="block">
-              <div className="relative h-48 mb-4 bg-gray-100 rounded-lg overflow-hidden">
+              <div className="relative h-[475px] mb-4 bg-gray-100 rounded-lg overflow-hidden">
                 <Image
-                  src={campaign.image || "/placeholder.svg?height=200&width=400"}
+                  src={
+                    campaign.image || "/placeholder.svg?height=200&width=400"
+                  }
                   alt={campaign.title}
                   fill
                   className="object-cover"
                 />
 
                 <div className="absolute inset-x-0 bottom-0 p-4">
-                  <p className="text-white text-sm leading-relaxed">{campaign.title}</p>
+                  <p className="text-white text-sm leading-relaxed">
+                    {campaign.title}
+                  </p>
                 </div>
 
                 <div className="absolute left-2 top-1/2 -translate-y-1/2">
                   <button
                     onClick={(e) => {
-                      e.preventDefault()
-                      prevSlide()
+                      e.preventDefault();
+                      prevSlide();
                     }}
                     className="bg-white rounded-full p-1 shadow-md"
                     aria-label="Previous slide"
@@ -83,8 +90,8 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
                 <div className="absolute right-2 top-1/2 -translate-y-1/2">
                   <button
                     onClick={(e) => {
-                      e.preventDefault()
-                      nextSlide()
+                      e.preventDefault();
+                      nextSlide();
                     }}
                     className="bg-white rounded-full p-1 shadow-md"
                     aria-label="Next slide"
@@ -98,7 +105,10 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center space-x-2">
                 <button className="text-rose-500" aria-label="Like">
-                  <Heart size={20} fill={campaign.id === "2" ? "none" : "currentColor"} />
+                  <Heart
+                    size={20}
+                    fill={campaign.id === "2" ? "none" : "currentColor"}
+                  />
                 </button>
                 <button aria-label="View details">
                   <Circle size={20} />
@@ -109,14 +119,22 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
               </div>
 
               <div className="text-right">
-                <span className={`font-bold ${campaign.fundingPercentage > 200 ? "text-rose-500" : "text-rose-500"}`}>
+                <span
+                  className={`font-bold ${
+                    campaign.fundingPercentage > 200
+                      ? "text-rose-500"
+                      : "text-rose-500"
+                  }`}
+                >
                   {campaign.fundingPercentage}% 달성
                 </span>
               </div>
             </div>
 
             <div className="mb-2">
-              <p className="font-medium">{campaign.fundingAmount.toLocaleString()}원이 집했어요.</p>
+              <p className="font-medium">
+                {campaign.fundingAmount.toLocaleString()}명이 찜했어요.
+              </p>
             </div>
 
             <div className="text-sm text-gray-600">
@@ -126,6 +144,5 @@ export function CampaignList({ title, campaigns }: CampaignListProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }
-
