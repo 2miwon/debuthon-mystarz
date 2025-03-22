@@ -50,8 +50,9 @@ const getCampaignById = (id: string) => {
   return campaigns[id as keyof typeof campaigns]
 }
 
-export default function CampaignDetailPage({ params }: { params: { id: string } }) {
-  const campaign = getCampaignById(params.id)
+export default async function CampaignDetailPage({ params }: { params: { id: string } }) {
+  const { id } = await params
+  const campaign = getCampaignById(id)
 
   if (!campaign) {
     return (

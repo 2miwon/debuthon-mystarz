@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Search, Bell, User } from "lucide-react"
+import Link from "next/link";
+import { Search, Bell, User } from "lucide-react";
 
 export function Header() {
   return (
@@ -9,12 +9,12 @@ export function Header() {
           MY<span className="text-black">★</span>Z
         </Link>
         <nav className="flex space-x-6">
-          <Link href="/initiatives" className="text-base font-medium">
+          <Link href="/" className="text-base font-medium">
             이니셔티브
           </Link>
-          <Link href="/marketplace" className="text-base font-medium">
-            마켓플레이스
-          </Link>
+          {/* <Link href="/marketplace" className="text-base font-medium"> */}
+          {/*   마켓플레이스 */}
+          {/* </Link> */}
         </nav>
       </div>
       <div className="flex items-center space-x-4">
@@ -32,6 +32,5 @@ export function Header() {
         </Link>
       </div>
     </header>
-  )
+  );
 }
-
