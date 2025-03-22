@@ -2,6 +2,7 @@ import { Header } from "@/components/header";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
+import PurchaseButton from "@/components/purchase-button";
 
 // This would typically come from a database or API
 const getMarketplaceItemById = (id: string) => {
@@ -39,12 +40,13 @@ const getMarketplaceItemById = (id: string) => {
   return items[id as keyof typeof items];
 };
 
-export default function MarketplaceItemDetailPage({
+export default async function MarketplaceItemDetailPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const item = getMarketplaceItemById(params.id);
+  const { id } = await params;
+  const item = getMarketplaceItemById(id);
 
   if (!item) {
     return (
@@ -108,12 +110,9 @@ export default function MarketplaceItemDetailPage({
             </p>
 
             <div className="grid grid-cols-2 gap-4">
-              <button className="bg-[#5ae2ad] hover:bg-[#4cd19c] text-white py-4 rounded-lg font-medium text-lg">
-                <div>구매하기</div>
-                <div className="text-sm font-normal">
-                  {item.onSale}개 판매 중
-                </div>
-              </button>
+              <div className="w-full">
+                <PurchaseButton />
+              </div>
 
               <button className="bg-[#5aace2] hover:bg-[#4a9ad2] text-white py-4 rounded-lg font-medium text-lg">
                 <div>판매하기</div>
