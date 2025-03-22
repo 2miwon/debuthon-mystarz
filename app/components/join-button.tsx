@@ -85,7 +85,7 @@ export default function JoinButton({
             ? "Processing..."
             : text !== undefined
             ? text
-            : "Join the Initiative"}
+            : "Pay with RLUSD"}
           <span className="text-xs">
             {isLoading ? "" : subText !== undefined ? subText : ""}
           </span>

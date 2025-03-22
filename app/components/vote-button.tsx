@@ -3,9 +3,9 @@
 
 import { useState } from "react";
 import { useWriteContract, useAccount, useConnect } from "wagmi";
-import { contractABI, contractAddress } from "../app/contractMarketplaceConfig";
+import { contractABI, contractAddress } from "../app/contractVoteConfig";
 
-export default function PurchaseButton() {
+export default function VoteButton() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const { isConnected } = useAccount();
@@ -30,25 +30,22 @@ export default function PurchaseButton() {
         {
           address: contractAddress,
           abi: contractABI,
-          functionName: "buy",
-          args: ["0x322aA19A8f4e3a5B1d95B4f81b9a2Bfa9FB4eDE3", BigInt(2)],
-          value: BigInt(1),
+          functionName: "vote",
+          args: [BigInt(0)],
+          value: BigInt(0),
         },
         {
           onSuccess(data) {
-            console.info("🚀 : purchase-button.tsx:38: data=", data);
             setMessage("참여가 성공적으로 완료되었습니다!");
             setIsLoading(false);
           },
           onError(error) {
-            console.info("🚀 : purchase-button.tsx:42: error=", error);
             setMessage("다시 시도해주세요.");
             setIsLoading(false);
           },
         },
       );
     } catch (error) {
-      console.info("🚀 : purchase-button.tsx:49: error=", error);
       setMessage("요청에 실패했습니다.");
       setIsLoading(false);
     }
@@ -94,20 +91,13 @@ export default function PurchaseButton() {
   };
 
   return (
-    <div className="relative h-full">
+    <div className="relative h-full flex justify-center -mt-20">
       <button
-        className="bg-[#5ae2ad] w-full h-full hover:bg-[#4cd19c] text-white py-4 rounded-lg font-medium text-lg"
+        className="bg-pink-700 flex items-center justify-center w-[180px] h-[40px] hover:bg-pink-900 text-white py-4 rounded-lg font-medium text-lg"
         onClick={handleJoin}
         disabled={isLoading}
       >
-        {isLoading ? (
-          "처리 중..."
-        ) : (
-          <>
-            <div>Sell</div>
-            <div className="text-sm font-normal">{30} XRP</div>
-          </>
-        )}
+        {isLoading ? "처리 중..." : <>Vote Submitted</>}
       </button>
 
       {message && (

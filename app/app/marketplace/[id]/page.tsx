@@ -4,6 +4,7 @@ import { Heart, Share2, Gift, ChevronLeft } from "lucide-react";
 import JoinButton from "@/components/join-button";
 import { CampaignList } from "@/components/campaign-list";
 import Link from "next/link";
+import PurchaseButton from "@/components/purchase-button";
 
 // This would typically come from a database or API
 const getCampaignById = (id: string) => {
@@ -342,7 +343,7 @@ function Actions() {
           <span className="font-bold pr-2.5">Buy</span>
           30 XRP
         </button>
-        <JoinButton text="Sell" subText="30 XRP" type="Marketplace" />
+        <PurchaseButton />
       </div>
     </div>
   );
