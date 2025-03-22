@@ -7,7 +7,7 @@ import { contractABI, contractAddress } from "../app/contractVoteConfig";
 
 export default function VoteButton() {
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("test");
   const { isConnected } = useAccount();
   const { connect, connectors } = useConnect();
   const { writeContract } = useWriteContract();
@@ -62,7 +62,7 @@ export default function VoteButton() {
       </button>
 
       {message && (
-        <p className="absolute pt-2 left-1/2 -translate-x-1/2 text-center text-sm text-gray-600">
+        <p className="absolute pt-2 top-[30px] left-1/2 -translate-x-1/2 text-center text-sm text-white">
           {message}
         </p>
       )}
